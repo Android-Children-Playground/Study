@@ -30,13 +30,13 @@
 
 ### 시스템 자원
 
-![Untitled](Activity%E1%84%8B%E1%85%AA%20Fragment%20df0f1058febe43e19ef2137a14795c15/Untitled.png)
+![image](https://user-images.githubusercontent.com/13197242/132123906-5320e14a-86ea-48d3-b52f-4dbf034fc06e.png)
 
 `Actvity`는 화면을 보여주고 android 시스템 자원에 접근하기 위해 다양한 Class들을 상속하고 있습니다. 그렇기 때문에 많은 `Activity`를 사용하게 되면 많은 자원을 사용하게 됩니다. 하지만 `Fragment`는 `Actvity`에 종속되어있고 `Activity`의 자원을 공유하고 있기 때문에 가볍다고 말할 수 있습니다.
 
 ## Activity의 생명주기
 
-![Untitled](Activity%E1%84%8B%E1%85%AA%20Fragment%20df0f1058febe43e19ef2137a14795c15/Untitled%201.png)
+![image](https://user-images.githubusercontent.com/13197242/132123900-fe7d61b9-59b7-456c-ba27-15e89829aa43.png)
 
 ## Activity 생명주기
 
