@@ -133,6 +133,93 @@
 
 - 어떤 빌드업 이벤트에서 초기화 작업을 실행하든 빌드업 이벤트에 상응하는 수명 주기 이벤트를 사용하여 리소스를 해제하세요. `ON_START` 이벤트 이후에 무언가를 초기화하는 경우, `ON_STOP` 이벤트 이후에 이를 해제하거나 종료하세요. `ON_RESUME` 이벤트 이후에 초기화하는 경우, `ON_PAUSE` 이벤트 이후에 해제하세요.
 
-### Fragment LifeCycle
+<br>
 
--
+### Fragment LifeCycle
+<img width="397" alt="스크린샷_2021-09-05_오후_3 32 32" src="https://user-images.githubusercontent.com/68374234/132120640-b2a1bf10-e198-4d42-9e93-9c58a7b8d31d.png">
+
+- `onAttach()` 
+    - Fragment가 Activity에 붙을 때 호출 됨, 
+    - `CREATED`상태일 때 이미 호출되었을 것, 
+    - 자원을 가져다 쓸 때 onAttach()를 override하여 사용
+
+<br>
+
+- Fragment`CREATED` `onCreate()`
+    - Activity와 마찬가지로 초기화해야하는 리소스들을 여기서 초기화함
+    - Fragment를 생성하면서 넘겨준 값들이 있다면, 여기서 변수에 넣어주면 됨
+    - But, 여기서 UI는 초기화할 수 없음 <- 아직 View가 그려진 것은 아님
+    - **Activity에서는 `onCreate()`에서 View나 UI관련 작업을 할 수 있는 것과 달리 Fragment에서는 할 수 없음 -> onCreateView()에서 UI관련 작업을 할 수 있음**
+
+<br>
+
+- Fragment`CREATED` View`INITIALIZED` `onCreateView()` `onViewCreated()` 
+    - fragment에서 UI를 그릴때 호출되는 콜백 
+    - 레이아웃을 inflate하는 곳
+    - View 객체를 얻을 수 있음 -> 버튼이나 텍스트뷰 등 UI작업을 할 수 있음
+    - Fragment가 자신의 인터페이스를 처음 그리기 위해 호출함
+    - View를 반환해야함, `onCreateView()`는 Fragment의 레이아웃 루트이기 때문에 UI를 제공하지 않는 경우 null을 반환하면 됨.
+    - Fragment에 속한 각종 View나 ViewGroup에 대한 UI 바인딩 작업을 할 수 있음 (Layout을 inflate 하여 View작업을 함)
+    - `onCreateView()`의 매개변수로 전달되는 contatiner == Activity의 ViewGroup
+        - container에 Fragment가 위치하게 됨
+    - `onCreateView()`의 매개변수로 전달되는 savedInstanceState : Bundle 객체로 Fragment가 재개되는 경우 이전 상태에 대한 데이터를 제공함
+    - `onCreateView()`를 통해 반환된 View 객체는 `onViewCreated()`의 파라미터로 전달됨
+    - **이 시점 부터 Fragment의 View의 Lifecycle이 `INITIALIZED` 상태로 업데이트** 되었기 때문에 View의 초기값을 설정해주거나 LiveData 옵저빙, RecyclerView 또는 ViewPager2에 사용될 Adapter 세팅 등을 여기서 해주는 것이 좋다.
+        > 그래서 이 시점이라는 것이 `onCreateView()`에서 하라는건지 `onViewCreated()`하라는건지 모르겠다...
+
+<br>
+
+- Fragment, View`CREATED` `onViewStateRestored()` 
+    - 저장해둔 모든 state 값이 Fragment의 View 계층 구조에 복원 됐을 때 호출됨
+    - **이때 Fragment의 View의 Lifecycle이 `INITIALIZED` 상태에서 `CREATED` 상태로 변경됐음을 알림**
+
+<br>
+
+- Fragment, View`STARTED` `onStart()`
+    - Fragment가 사용자에게 보여질 수 있을 때 호출됨
+    - Fragment가 attach 되어있는 Activity의 onStart() 시점과 유사함
+    - 이 시점부터 Fragment의 childFragmentManager를 통해 FragmentTransaction을 안전하게 수행할 수 있음
+    - **Fragment의 View의 Lifecycle도 `STARTED` 상태로 변경됨**
+
+<br>
+
+- Fragment, View`RESUMED` `onResume()`
+    - Fragment가 보이는 상태에서 모든 Animator와 Transaction 효과가 종료되고, 프래그먼트가 사용자와 상호작용할 수 있을 때 `onResume()`이 호출됨
+    - `onStart()`와 마찬가지로 주로 Activity onResume() 시점과 유사함
+    - `RESUMED` 상태가 됐다는 것은 사용자가 프래그먼트와 상호작용하기에 적절한 상태가 된 것 == `onResume()`이 호출되지 않은 시점에서는 입력을 시도하거나 포커스를 설정하는 등의 작업을 임의로 하면 안된다는 것을 의미
+
+<br>
+
+- Fragment, View`STARTED` `onPause()`
+    - 사용자가 Fragment를 떠나기 시작했지만 Fragment는 여전히 visible일 때 `onPause()` 호출됨
+    - **Fragment와 View의 Lifecycle이 `PAUSED`가 아닌 `STARTED`가 됨**
+
+<br>
+
+- Fragment, View`CREATED` `onStop()`
+    - **Fragment가 더이상 화면에 보여지지 않게 되면 Fragment와 View의 Lifecycledms `CREATED` 상태가 되고 `onStop()`이 호출됨**
+    - 이 상태는 부모 Activity나 Fragment 중단됐을 때 뿐만아니라, 부모 Activity나 Fragment의 상태가 저장될 때도 호출됨.
+    - API 28버전부터 `onStop()`이 `onSavedInstanceState()`보다 먼저 호출됨 -> `onStop()`이 FragmentTransaction을 안전하게 수행할 수 있는 마지막 지점이 되었음
+    <img width="601" alt="스크린샷 2021-09-06 오전 1 46 48" src="https://user-images.githubusercontent.com/68374234/132134744-a3453337-db3b-4f55-ad5c-a9c8c497d971.png">
+
+<br>
+
+- Fragment, View`CREATED` `onSaveInstanceState()`
+
+<br>
+
+- View`CREATED` Fragment `DESTROYED` `onDestroyView()`
+    - 모든 exit animation과 transaction이 완료되고, Fragment가 화면으로부터 벗어났을 경우 Fragment의 View의 LifeCycle은 `DESTROYED`가 되고 `onDestroy()`가 호출됨
+    - 이 시점 부터는 getViewLifecycleOwnerLiveData()의 리턴값으로 null이 반환됨
+    - 해당 시점에서는 Garbage Collector에 의해 수거될 수 있도록 Fragment View에 대한 모든 참조가 제거되어야 함
+
+<br>
+
+- Fragment`DESTROYED` `onDestroy()
+    - Fragment가 제거되거나 FragmentManager가 destroy 됐을 경우, Fragment의 Lifecycel은 `DESTROYED`상태가 되고 `onDestroy()`가 호출됨
+    - 해당 지점은 Fragment의 Lifecycle의 끝을 알림
+    - `onAttach()`가 `onCreate()` 이전에 호출됐던 것처럼 `onDestroy()`이후에 `onDettach()` 호출됨
+
+<br>
+
+참고 : Android Developers 공식문서, https://asong-study-record.tistory.com/69, https://readystory.tistory.com/199
