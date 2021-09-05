@@ -19,7 +19,7 @@
 1. 이벤트 프레임워크 및 `Lifecycle` 클래스에서 전달되는 수명 주기 이벤트입니다. 이러한 이벤트는 액티비티와 프래그먼트의 콜백 이벤트에 매핑됩니다.
 2. 상태 `Lifecycle` 객체가 추적한 구성요소의 현재 상태입니다.
 
-![Screen Shot 2021-09-05 at 4.24.42 PM.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/64508d31-6d2a-4dbd-82c7-9ff589c17aea/Screen_Shot_2021-09-05_at_4.24.42_PM.png)
+<img width="781" alt="Screen Shot 2021-09-05 at 5 04 09 PM" src="https://user-images.githubusercontent.com/55446114/132119975-f73fe451-7550-4bb7-a7ce-d7ca150e972f.png">
 
 ```java
 public abstract class Lifecycle {
@@ -158,7 +158,7 @@ view는 포커스를 얻으면 레이아웃을 그리도록 요청합니다.
 부모뷰는 자식뷰가 그려지기전에 그려지고, 형제뷰는 전위방식에 따라 순서대로 그려지게 됩니다.  
  레이아웃을 그리는 과정은 측정(measure)단계와 레이아웃(layout)단계를 통해 그려지게 됩니다.
 
-<img width="200" alt="Screen_Shot_2021-08-11_at_1 08 59_AM" src="https://user-images.githubusercontent.com/55446114/132091944-8dbdfd63-cfcc-440c-8940-215a5f0ba562.png">
+<img width="250" alt="Screen_Shot_2021-08-11_at_1 08 59_AM" src="https://user-images.githubusercontent.com/55446114/132091944-8dbdfd63-cfcc-440c-8940-215a5f0ba562.png">
 
 https://beomseok95.tistory.com/249. 
 https://woovictory.github.io/2019/01/06/Android-View-Functions/. 
