@@ -1,6 +1,6 @@
-# Week1-1. Activity와 Fragment차이
+# Week1-1. Activity와 Fragment의 차이
 
-## Activity, Fragment 차이
+## Activity, Fragment의 차이
 
 ### Activity
 
@@ -46,13 +46,11 @@
 - Activity는 가장 밑부분에 존재하는 틀, View들은 Activity가 있어야만 존재할 수 있다. Fragment도 마찬가지.
 - 그런데 Fragment는 Activity의 성질도 갖고 있으므로 Fragment위에도 View가 존재할 수 있다. Fragment는 Activity와 View의 중간성질.
 - Fragment는 View가 아니기 때문에 findViewById() 메소드를 즉각 호출하는 것이 불가능하다. getSupportFragmentManager()를 호출해서 FragmentManager 객체를 불러와서 findViewById()를 사용해야 한다.
-- Activity가 onCreate()할 때 : Fragment는 onAttach() → onCreate() → onCreateView() → onActivityCreated()
-- Activity가 onDestroy()할 때 : Fragment는 onDestroyView() → onDestroy() → onDetach()
-
+- Activity가 onCreate()할 때 : Fragment는 onAttach() -> onCreate() -> onCreateView() -> onViewCreated() -> onViewStateRestored()
+- Activity가 onDestroy()할 때 : Fragment는 onSaveInstanceState() -> onDestroyView() -> onDestroy() -> onDetach()
+    <div>
+    <img width="337" alt="스크린샷_2021-09-05_오후_4 01 06" src="https://user-images.githubusercontent.com/68374234/132122018-1c85c26e-e4b8-499b-af9b-70ecd0bf1f71.png"> 
     <img width="397" alt="스크린샷_2021-09-05_오후_3 32 32" src="https://user-images.githubusercontent.com/68374234/132120640-b2a1bf10-e198-4d42-9e93-9c58a7b8d31d.png">
+    </div>
 
-    출처 : [Fragment - Android Developers 공식문서](https://developer.android.com/guide/fragments/lifecycle?hl=ko)
-
-    <img width="787" alt="스크린샷_2021-09-05_오후_3 26 13" src="https://user-images.githubusercontent.com/68374234/132120637-e9c299a3-33c0-42a9-91a0-3a821bdc2235.png">출처 : [Fragment lifecycle and communications](https://google-developer-training.github.io/android-developer-advanced-course-concepts/unit-1-expand-the-user-experience/lesson-1-fragments/1-2-c-fragment-lifecycle-and-communications/1-2-c-fragment-lifecycle-and-communications.html)
-
-참고 : [Acitivity](https://developer.android.com/guide/components/activities/intro-activities?hl=ko), [Fragment](https://developer.android.com/guide/fragments?hl=ko), [https://milkye.tistory.com/60](https://milkye.tistory.com/60), [https://kumgo1d.tistory.com/76](https://kumgo1d.tistory.com/76)
+참고 : [Acitivity](https://developer.android.com/guide/components/activities/intro-activities?hl=ko), [Fragment](https://developer.android.com/guide/fragments?hl=ko), [https://milkye.tistory.com/60](https://milkye.tistory.com/60), [https://kumgo1d.tistory.com/76](https://kumgo1d.tistory.com/76) 
