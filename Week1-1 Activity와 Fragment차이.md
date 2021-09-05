@@ -1,6 +1,6 @@
 # Week1-1. Activity와 Fragment차이
 
-# Activity, Fragment 차이
+## Activity, Fragment 차이
 
 ### Activity
 
@@ -49,12 +49,10 @@
 - Activity가 onCreate()할 때 : Fragment는 onAttach() → onCreate() → onCreateView() → onActivityCreated()
 - Activity가 onDestroy()할 때 : Fragment는 onDestroyView() → onDestroy() → onDetach()
 
-    ![스크린샷 2021-09-05 오후 3.32.32.png](Week1-1%20Activity%E1%84%8B%E1%85%AA%20Fragment%E1%84%8E%E1%85%A1%E1%84%8B%E1%85%B5%20a9fb512ede5347fb8396fa5126570bca/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2021-09-05_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.32.32.png)
+    <img width="397" alt="스크린샷_2021-09-05_오후_3 32 32" src="https://user-images.githubusercontent.com/68374234/132120640-b2a1bf10-e198-4d42-9e93-9c58a7b8d31d.png">
 
     출처 : [Fragment - Android Developers 공식문서](https://developer.android.com/guide/fragments/lifecycle?hl=ko)
 
-    ![스크린샷 2021-09-05 오후 3.26.13.png](Week1-1%20Activity%E1%84%8B%E1%85%AA%20Fragment%E1%84%8E%E1%85%A1%E1%84%8B%E1%85%B5%20a9fb512ede5347fb8396fa5126570bca/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2021-09-05_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_3.26.13.png)
-
-    출처 : [Fragment lifecycle and communications](https://google-developer-training.github.io/android-developer-advanced-course-concepts/unit-1-expand-the-user-experience/lesson-1-fragments/1-2-c-fragment-lifecycle-and-communications/1-2-c-fragment-lifecycle-and-communications.html)
+    <img width="787" alt="스크린샷_2021-09-05_오후_3 26 13" src="https://user-images.githubusercontent.com/68374234/132120637-e9c299a3-33c0-42a9-91a0-3a821bdc2235.png">출처 : [Fragment lifecycle and communications](https://google-developer-training.github.io/android-developer-advanced-course-concepts/unit-1-expand-the-user-experience/lesson-1-fragments/1-2-c-fragment-lifecycle-and-communications/1-2-c-fragment-lifecycle-and-communications.html)
 
 참고 : [Acitivity](https://developer.android.com/guide/components/activities/intro-activities?hl=ko), [Fragment](https://developer.android.com/guide/fragments?hl=ko), [https://milkye.tistory.com/60](https://milkye.tistory.com/60), [https://kumgo1d.tistory.com/76](https://kumgo1d.tistory.com/76)
