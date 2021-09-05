@@ -19,7 +19,7 @@ UI를 포함하는 하나의 화면을 말한다.
 
 안드로이드 시스템은 실행 중인 앱의 Activity Stack을 관리한다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/37276c17-bcb2-4edb-8bd1-eab066ef7bda/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/132121745-2f2708c3-2ca1-4933-b827-fb2dfa1a9128.png)
 
 앱을 실행할 때 액티비티 #1을 실행시킨다고하면 Activity Stack에는 액티비티 #1이 담겨있다.
 
@@ -35,7 +35,7 @@ layout을 정의할 수 있어 화면을 구성할 수 있다.
 
 하지만 단일로는 사용할 수 없고 항상 Activity 내에서 호스팅되어야하고 생명주기가 Activity에 종속적이다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c3bf38a0-21ed-4f24-a9d0-216885926cc1/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/132121756-2d8b68e1-d664-4251-99ab-3d7d7ddc7ea2.png)
 
 Fragment간 이동은 Fragment Manager가 관리하고 메소드 호출에 의해 이동한다.
 
@@ -53,11 +53,11 @@ Activity만 사용해서 충분히 앱을 구현할 수 있다.
 
 Activity는 Activity 내에 있는 Fragment를 바꿈으로써 사용자에게 보여줄 화면을 전환할 수 있다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cd5991d5-c5de-4d1b-b706-37547b1d4bfa/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/132121765-1f39b799-237f-46e3-b539-e794791f906f.png)
 
 또한 Fragment는 모듈로써 사용되기때문에 여러 Activity에 재사용할 수 있다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/622bd52a-69e7-4737-b972-fd64ab837883/Untitled.png)
+![Untitled (1)](https://user-images.githubusercontent.com/50517813/132121774-c8a236aa-ff73-4859-a097-fced923f2ee1.png)
 
 위 기능들을 사용하면 Activity만으로 안드로이드 앱 개발한 것보다 효율적으로 할 수 있다.
 
@@ -65,7 +65,7 @@ Activity는 Activity 내에 있는 Fragment를 바꿈으로써 사용자에게 �
 
 ## 1. Activity
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/20834f0d-27c3-4c9d-a68e-f1fef4c20aed/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/132121782-e940425a-d565-4db5-affa-cee1012f165c.png)
 
 ### 1) onCreate : UI 준비
 
@@ -132,7 +132,7 @@ back 버튼을 탭해서 앱을 종료시킬 때
 
 ## 2. Fragment
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f342714f-9b5d-47ff-bfa0-abe3a6c9f094/Untitled.png)
+![Untitled (1)](https://user-images.githubusercontent.com/50517813/132121796-a2d4ed72-a0ed-48be-983f-23fb3bc86dfc.png)
 
 ### 1) onCreate
 
@@ -143,11 +143,6 @@ Fragment Instance를 구성한다. (Model 등)
 Fragment 뷰의 Layout을 inflate한다.
 
 inflate된 뷰를 hosting activity에 반환한다.
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0c992718-0063-4775-a153-2ad46bd2713c/Untitled.png)
-
-- container : 위젯을 올바르게 구성하는 데 필요한 view의 부모
-- false : inflate된 fragmente의 뷰는 Activity의 Container 뷰에 호스팅되어야하기때문에, 부모에 즉시 추가하지 않아야 한다.
 
 ### 3) onViewCreated
 
