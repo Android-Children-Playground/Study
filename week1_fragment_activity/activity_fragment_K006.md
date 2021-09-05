@@ -28,11 +28,11 @@ Fragment는 단독으로 존재할 수 없다. 이것이 activity와 fragment의
 
 그리고 이는 FragmentActivity 또는 이를 상속받은 activity 클래스가 된다. FragmentActivity를 포함한 하위 클래스부터 fragment 기능을 사용할 수 있다.
 
-![image](https://user-images.githubusercontent.com/71161576/132122207-f582742a-7e16-4127-9c4b-9a59ab684949.png)
+<img src="https://user-images.githubusercontent.com/71161576/132122207-f582742a-7e16-4127-9c4b-9a59ab684949.png"/>
 
 내부에 FragmentManager를 호출하는 메서드도 당연히 존재한다.
 
-![image](https://user-images.githubusercontent.com/71161576/132122353-7364f072-40cd-44ce-9205-96ac0177381e.png)
+<img src="https://user-images.githubusercontent.com/71161576/132122353-7364f072-40cd-44ce-9205-96ac0177381e.png"/>
 
 Activity를 생성하면 자동으로 AppCompatActivity를 상속하는 클래스를 생성해주는데, 이 또한 
 
@@ -40,7 +40,7 @@ FragmentActivity를 상속하기 때문에 Fragment를 사용할 수 있다.
 
 1. **사용자 인터페이스의 일부를 나타낼 수 있다.**
 
-![image](https://user-images.githubusercontent.com/71161576/132122363-b8a70909-5be6-43d8-ad68-4c15858a35ba.png)
+<img src="https://user-images.githubusercontent.com/71161576/132122363-b8a70909-5be6-43d8-ad68-4c15858a35ba.png"/>
 
 fragment는 이처럼 `모듈식`으로 사용자 인터페이스의 일부분을 나타낼 수 있다. 태블릿 기기처럼 화면이 큰 경우에는 화면을 분할하여 이 부분을 fragment로 표현할 수 있다. 
 
@@ -62,7 +62,7 @@ fragment는 이처럼 `모듈식`으로 사용자 인터페이스의 일부분�
 
 ### 구조적인 차이점
 
-![image](https://user-images.githubusercontent.com/71161576/132122380-84510748-1463-4ea2-a008-79dd58ad4ee6.png)
+<img  src="https://user-images.githubusercontent.com/71161576/132122380-84510748-1463-4ea2-a008-79dd58ad4ee6.png"/>
 
 **Activity** 와 **fragment**의 가장 큰 차이점이라 하면, **fragment** 인스턴스는  **activity** 인스턴스에  종속 된다는 것이다. ( **Fragment** 클래스 자체가 **Activity** 클래스에 종속된다는 것은 아니다 )
 
@@ -78,7 +78,7 @@ fragment는 이처럼 `모듈식`으로 사용자 인터페이스의 일부분�
 
 **Activity**간 데이터를 전달하는 가장 일반적인 방법은 **Intent**를 사용하는 방법이다. **Activity**의 정의에서도 알 수 있듯이 **activity**는 다른 프로세스에서 실행하는 것을 염두하고 설계 되었기 때문에 메모리 영역을 공유하지 않는다. 그렇기 때문에 리눅스 커널 레벨에서 프로세스 간 통신(IPC)을 하게 되는데, 이 부분에서 메모리를 직접 공유하는 것보다 퍼포먼스가 많이 떨어지게 된다.
 
-![image](https://user-images.githubusercontent.com/71161576/132122389-027594f0-26a2-4423-b7a2-680a387ec953.png)
+<img src="https://user-images.githubusercontent.com/71161576/132122389-027594f0-26a2-4423-b7a2-680a387ec953.png"/>
 
 Fragment간 데이터 전달은 이들은 관리하는 activity를 통해서 자유롭게 이루어진다. 관련된 fragment 들은 하나의 activity에 종속되고, 이 메모리를 공유할 수 있게 된다. [코드 베이스로 frgmanet간의 데이터를 전달하는 방법](https://developer.android.com/training/basics/fragments/communicating)도 있지만, 이는 다소 까다로운 과정을 수반한다.
 
@@ -114,7 +114,7 @@ Fragment간 데이터 전달은 이들은 관리하는 activity를 통해서 자
 
 ## Activity Lifecycle
 
-![image](https://user-images.githubusercontent.com/71161576/132122417-caa5d7c3-2a08-4be9-a907-58669b843fa0.png)
+<img src="https://user-images.githubusercontent.com/71161576/132122417-caa5d7c3-2a08-4be9-a907-58669b843fa0.png"/>
 
 **Activity** 클래스는 **lifecycle** 상태에 대한 6가지 **lifecycle callback** 메서드를 가지게 된다.
 
@@ -187,7 +187,7 @@ Callback 메서드의 종류는 다음과 같다.
 
 ## Fragment Lifecycle
 
-![image](https://user-images.githubusercontent.com/71161576/132122436-7643eb66-289a-4d01-8a6d-592150dd4f03.png)
+<img src="https://user-images.githubusercontent.com/71161576/132122436-7643eb66-289a-4d01-8a6d-592150dd4f03.png"/>
 
 ### onCreate()
 
@@ -215,7 +215,7 @@ Callback 메서드의 종류는 다음과 같다.
 
 이 시점부터는 **fragment** 의 **childFragmentManager** 통해 **fragment** **transaction** 을 안전하게 수행할 수 있음을 보장할 수 있다.
 
-![image](https://user-images.githubusercontent.com/71161576/132122453-61da2de6-86c0-488f-8d79-09e279d4d602.png)
+<img src="https://user-images.githubusercontent.com/71161576/132122453-61da2de6-86c0-488f-8d79-09e279d4d602.png"/>
 ### **onResume()**
 
 **Fragment** 가 보이는 상태에서, 사용자와 상호작용할 수 있을 때 **onResume()** 콜백이 호출된다. 이것 또한 마찬가지로 activity 의 **onResume()** 가 호출되는 시기와 유사하다.
