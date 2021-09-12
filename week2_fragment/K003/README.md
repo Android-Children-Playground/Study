@@ -75,7 +75,7 @@ Fragment의 생성과 관리는 FragmentManager를 통해 동작하는데 이는
 
 Fragment를 관리하는 FragmentManager는 최초 FragmentActivity에서 생성되는데 Fragment에서는 fragmentManager가 4개나 존재한다
 
-![fragmentmanager](.\res\week2\fragmentmanager.png)
+<img src=".\res\week2\fragmentmanager.png" alt="fragmentmanager" style="zoom:80%;" />
 
 ##### getFragmentManager(), getRequireFragmentManager() 
 
@@ -131,17 +131,17 @@ EmptyActivity와 달리 BlankFragment는 주렁주렁 이상한 코드들이 같
 
 그 이유를 알아보기 위해 Fragment를 생성할때 newIntance를 사용하지 않고 생성자에 arugment를 넘겨 보았다. 
 
-![image-20210912035652123](.\res\week2\fragment클래스.png)
+<img src=".\res\week2\fragment클래스.png" alt="image-20210912035652123" style="zoom:80%;" />
 
 그 결과 이런 에러와 함께 앱이 종료되었다.
 
-![fragment생성자](.\res\week2\fragment생성자.png)
+<img src=".\res\week2\fragment생성자.png" alt="fragment생성자" style="zoom:80%;" />
 
 could not find fragment constructor라는 에러메시지가 나타나는데 이 에러를 배출하는 instantiate를 한번 살펴보자
 
 이중에 getConstructor를 살펴보면 리플렉션의 메소드인것을 알수 있다 (클래스에 정의된 생성자를 반환하는 메소드) 
 
-![reflection](.\res\week2\reflection.png)
+<img src=".\res\week2\reflection.png" alt="reflection" style="zoom:80%;" />
 
 그리고 newInstance()를 통해 새로운 Fragment객체를 생성하는 것을 볼수 있다 이때 우리가 생성자를 변경했다면 newInstance()를 통해 클래스를 생성할때 매개변수가 없는 생성자는 존재하지 않아 NoSuchMethodException을 발생하게 되고 앱이 종료되는 것이다.
 
