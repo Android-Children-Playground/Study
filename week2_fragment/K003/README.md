@@ -131,7 +131,7 @@ EmptyActivity와 달리 BlankFragment는 주렁주렁 이상한 코드들이 같
 
 그 이유를 알아보기 위해 Fragment를 생성할때 newIntance를 사용하지 않고 생성자에 arugment를 넘겨 보았다. 
 
-![image-20210912035652123](C:\Users\PsPLoG\AppData\Roaming\Typora\typora-user-images\image-20210912035652123.png)
+![image-20210912035652123](.\res\week2\fragment클래스.png)
 
 그 결과 이런 에러와 함께 앱이 종료되었다.
 
@@ -173,7 +173,6 @@ https://github.com/androidbroadcast/ViewBindingPropertyDelegate
 다른 개발자가 이것을 간단하게 해주는 라이브러리를 만들어 두었다. 알고 쓰자!
 
 끝!
-
 
 
 
