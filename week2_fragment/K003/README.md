@@ -22,7 +22,8 @@ Fragment 상태전환 라이프사이클(부록1 Viewbinding fragment 메모리�
 
 #### Fragment 생성 
 
-<img src="C:\Users\PsPLoG\Desktop\res\week2\fragment생명주기생성.png" alt="fragment생명주기생성" style="zoom:50%;" align="left" />
+<img src=".\res\week2\fragment생명주기생성.png" alt="fragment생명주기생성" style="zoom:50%;"/>
+
 
 먼저 `Activity`와 `Fragment`가 처음 생성될때이다 `Activity`의 `onCreate`와 함께 `Fragment`가 `onAttach`되고 `onStart`까지 진행해 시작될준비를 마치고 `Activity`의 `onResume`과 동시에 시작된다
 
@@ -30,7 +31,7 @@ Fragment 상태전환 라이프사이클(부록1 Viewbinding fragment 메모리�
 
 이때 다른 `Fragment`로 전환되면 어떻게 될까?
 
-<img src="C:\Users\PsPLoG\Desktop\res\week2\fragment생명주기교체.png" alt="fragment생명주기교체" style="zoom:50%;" align="left" />
+<img src=".\res\week2\fragment생명주기교체.png" alt="fragment생명주기교체" style="zoom:50%;"  />
 
 화면에 보이고 있던 `HomeFragment`는 `onStop`까지 실행되고 `DashboardFragment`는 처음 생성되는 `onAttach` ~ `onResume` 순서로 실행된다 (이때 `Activity`와 달리 `onResume`전에 `onDestroyView`가 실행) 
 
@@ -40,7 +41,7 @@ Fragment 상태전환 라이프사이클(부록1 Viewbinding fragment 메모리�
 
 #### Fragment 제거 및 복원
 
-<img src="C:\Users\PsPLoG\Desktop\res\week2\fragment생명주기파괴.png" alt="fragment생명주기파괴" style="zoom:50%;" align="left" />
+<img src=".\res\week2\fragment생명주기파괴.png" alt="fragment생명주기파괴" style="zoom:50%;"  />
 
 다시 `DashboardFragment`는 `onStop`까지 호출되고 `backstack`에 저장되어있던 `HomeFragment`는 새로운View를 생성하고 시작된다 그리고 backstack`에서` 사라지는 `DashboardFragment`는 `onDetach`까지 호출되며 메모리 상에서 사라진다 .
 
@@ -52,11 +53,11 @@ Fragment 상태전환 라이프사이클(부록1 Viewbinding fragment 메모리�
 
 새로운 Activity 생성
 
-<img src="C:\Users\PsPLoG\Desktop\res\week2\새로운 Activity.png" alt="새로운 Activity" style="zoom:60%;" align="left"/>
+<img src=".\res\week2\새로운 Activity.png" alt="새로운 Activity" style="zoom:60%;"/>
 
 새로운 Activitiy 파괴
 
-<img src="C:\Users\PsPLoG\Desktop\res\week2\새로운Activity 종료.png" alt="새로운Activity 종료" style="zoom:60%; " align="left" />
+<img src=".\res\week2\새로운Activity 종료.png" alt="새로운Activity 종료" style="zoom:60%; " />
 
 이전 예제에서 Fragment의 생성파괴는 Activity에 어떠한 영향을 주지 않았다. 하지만 Fragment는 Activity의 생명주기를 따라가고 있는것을 볼 수 있다.
 
@@ -64,9 +65,9 @@ Fragment 상태전환 라이프사이클(부록1 Viewbinding fragment 메모리�
 
 ### FragmentManager
 
-![FragmentActivity](C:\Users\PsPLoG\Desktop\res\week2\FragmentActivity.png)
+![FragmentActivity](.\res\week2\FragmentActivity.png)
 
-<img src="C:\Users\PsPLoG\Desktop\res\week2\getSupportFragmentManager.png" alt="getSupportFragmentManager" style="zoom:65%;" align="left" />
+<img src=".\res\week2\getSupportFragmentManager.png" alt="getSupportFragmentManager" style="zoom:65%;" />
 
 Fragment의 생성과 관리는 FragmentManager를 통해 동작하는데 이는 Activity가 아닌 FragmentActivity가 가지고 있는 객체이다 그러므로 Fragment를 사용하려면 FragmentActivity를 상속하고 있는 Activity에서 사용해야 한다.
 
@@ -74,7 +75,7 @@ Fragment의 생성과 관리는 FragmentManager를 통해 동작하는데 이는
 
 Fragment를 관리하는 FragmentManager는 최초 FragmentActivity에서 생성되는데 Fragment에서는 fragmentManager가 4개나 존재한다
 
-![fragmentmanager](C:\Users\PsPLoG\Desktop\res\week2\fragmentmanager.png)
+![fragmentmanager](.\res\week2\fragmentmanager.png)
 
 ##### getFragmentManager(), getRequireFragmentManager() 
 
@@ -86,7 +87,7 @@ deprecated된 초기 `fragmentManager` getter이다 현재 남아있는 코드�
 
 ##### getChildFragmentManager()
 
-<img src="C:\Users\PsPLoG\Desktop\res\week2\fragmentManager생성.png" alt="fragmentManager생성" style="zoom:67%;" align="left" />
+<img src=".\res\week2\fragmentManager생성.png" alt="fragmentManager생성" style="zoom:67%;" />
 
 Fragment가 생성될때 같이 생성된 childFragmentManager를 반환한다.
 
@@ -94,7 +95,7 @@ Fragment가 생성될때 같이 생성된 childFragmentManager를 반환한다.
 
 mChildFragmentManager같은 경우는 Fragment가 생성될때 멤버로 같이 생성된다 하지만 mFragmentManager는 Fragment내에서는 사용하는 곳만 존재할뿐 어디서 오는지 알수 없다 
 
- <img src="C:\Users\PsPLoG\Desktop\res\week2\fragmentManageraddFragment.png" alt="fragmentManageraddFragment" style="zoom:55%;" />
+ <img src=".\res\week2\fragmentManageraddFragment.png" alt="fragmentManageraddFragment" style="zoom:55%;" />
 
 해답은 간단하다 FragmentManager에서 fragment를 생성하고 넣어주는 메소드에서 자신을 주입해준다. 이는 부모자식 관계로 구성하기 위함으로 생각된다. 
 
@@ -124,7 +125,7 @@ Fragment Transaction은 크게 3가지로 구성되어있다.
 
 EmptyActivity와 달리 BlankFragment는 주렁주렁 이상한 코드들이 같이 생성된다 
 
-<img src="C:\Users\PsPLoG\Desktop\res\week2\blankFragment.png" alt="blankFragment" style="zoom:33%;" />
+<img src=".\res\week2\blankFragment.png" alt="blankFragment" style="zoom:33%;" />
 
 자동으로 생성된 코드의 주요내용은 Fragment를 생성하는 argument를 이용한 newInstance의 메소드가 대부분이다. 구글은 왜 이렇게 긴 코드를 기본으로 넣었을까?
 
@@ -134,13 +135,13 @@ EmptyActivity와 달리 BlankFragment는 주렁주렁 이상한 코드들이 같
 
 그 결과 이런 에러와 함께 앱이 종료되었다.
 
-![fragment생성자](C:\Users\PsPLoG\Desktop\res\week2\fragment생성자.png)
+![fragment생성자](.\res\week2\fragment생성자.png)
 
 could not find fragment constructor라는 에러메시지가 나타나는데 이 에러를 배출하는 instantiate를 한번 살펴보자
 
 이중에 getConstructor를 살펴보면 리플렉션의 메소드인것을 알수 있다 (클래스에 정의된 생성자를 반환하는 메소드) 
 
-![reflection](C:\Users\PsPLoG\Desktop\res\week2\reflection.png)
+![reflection](.\res\week2\reflection.png)
 
 그리고 newInstance()를 통해 새로운 Fragment객체를 생성하는 것을 볼수 있다 이때 우리가 생성자를 변경했다면 newInstance()를 통해 클래스를 생성할때 매개변수가 없는 생성자는 존재하지 않아 NoSuchMethodException을 발생하게 되고 앱이 종료되는 것이다.
 
@@ -155,20 +156,9 @@ Fragment는 가볍다고 하지만 다양한 정보들을 가지고 있다 언�
 
 
 #### 부록2. ViewBinding 메모리릭 이슈
+<img src=".\res\week2\activityViewbinding.png" alt="activityViewbinding" style="zoom:50%;" />
 
-#### <img src="C:\Users\PsPLoG\Desktop\res\week2\activityViewbinding.png" alt="activityViewbinding" style="zoom:50%;" align ="left" />
-
-
-
-
-
-
-
-
-
-
-
-<img src="C:\Users\PsPLoG\Desktop\res\week2\fragmentViewbinaing.png" alt="fragmentViewbinaing" style="zoom:50%;" align ="left"/>
+<img src=".\res\week2\fragmentViewbinaing.png" alt="fragmentViewbinaing" style="zoom:50%;"/>
 
 새 프로젝트를 생성하고 Fragment에서 ViewBinding을 사용하는 코드가 생성될때 Activity와 다르게 이상한 코드가 생겨있고 이상한 주석도 생겨있다.
 
