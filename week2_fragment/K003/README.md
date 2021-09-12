@@ -65,7 +65,7 @@ Fragment 상태전환 라이프사이클(부록1 Viewbinding fragment 메모리�
 
 ### FragmentManager
 
-![FragmentActivity](.\res\week2\FragmentActivity.png)
+<img src=".\res\week2\FragmentActivity.png" />
 
 <img src=".\res\week2\getSupportFragmentManager.png" alt="getSupportFragmentManager" style="zoom:65%;" />
 
