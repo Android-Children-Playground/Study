@@ -21,3 +21,13 @@ ACP는 안드로이드와 관련된 각종 기술들의 학습 및 기술이 나
 1. 자신이 공부하고 싶은 주제를 issue에 등록
 2. 매주 발표 후 투표를 통해 다음 주 주제를 선정
 3. 공부할 분량이 많다면 최대 2주까지 연장하여 스터디 진행
+
+스터디 주제
+---
+#### week1. Activity와 Fragment [#3](https://github.com/Android-Children-Playground/Study/issues/3)
+
+발표자 :[@shshksh](https://github.com/Android-Children-Playground/Study/blob/main/week1_fragment_activity/K005/README.md) 
+
+#### week2. Fragment [#8](https://github.com/Android-Children-Playground/Study/issues/3)
+
+발표자 :[@PsPLoG](https://github.com/Android-Children-Playground/Study/blob/main/week2_fragment/K003/README.md), [@dongkey1198](https://github.com/Android-Children-Playground/Study/blob/main/week2_fragment/K002/README.md)
