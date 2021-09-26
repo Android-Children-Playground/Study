@@ -255,3 +255,7 @@ ViewModel 인스턴스의 Scope는 ViewModel을 가져올 때 ViewModelProvider�
 예를 들어 ViewModelProvider에 다음과 같이 MainActivity가 전달된다면, MainViewModel의 데이터는 MainActivity의 Lifecycle을 따른다.
 
 ![Untitled](https://user-images.githubusercontent.com/50517813/134809843-7c61956c-df11-47d1-b16a-12d4116a31af.png)
+
+# 참고
+https://codechacha.com/ko/android-jetpack-lifecycle
+https://kotlinworld.com/89?category=918952
