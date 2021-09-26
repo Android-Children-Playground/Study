@@ -13,7 +13,7 @@
 
 각종 라이브러리에서 `lifecycle`처리 할때 우리는 `LifecycleOwner`를 넘기고 `lifecycle` 처리를 한다.
 
-```
+```kotlin
 @MainThread
 public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
     assertMainThread("observe");
@@ -67,7 +67,7 @@ class LifecycleTest : LifecycleObserver {
 
 `ViewModel`도 `LifecycleOwner`와 비슷하게 `ViewModelStoreOwner`라는 인터페이스를 구현해야 사용할 수 있다.
 
-```
+```kotlin
 public class ViewModelStore {
 
     private final HashMap<String, ViewModel> mMap = new HashMap<>();
@@ -105,7 +105,7 @@ public class ViewModelStore {
 
 이때 우리가 평소 `ActivityViewModel`을 생성해 `Fragment`에서 `ViewModel`을 공유하는 방식을 살펴 볼수 있는데 `ViewModelStore`에 접근 `ViewModel`을 가져올때 `Key`값으로 `class`의 `canonicalName`을 사용해 `ViewModel`을 가져오는 것을 볼수 있다
 
-```
+```kotlin
 @MainThread
 public <T extends ViewModel> T get(@NonNull Class<T> modelClass) {
     String canonicalName = modelClass.getCanonicalName();
