@@ -235,7 +235,37 @@ public interface Observer<T> {
 `activeStateChanged` 메소드에서는 옵저버의 활성 상태 여부를 변경하며, 비활성 상태에서 활성 상태로 전환되는 경우에만 옵저버에게 값의 변경을 전파하도록 요청한다.
 
 ```java
-private abstract class ObserverWrapper {    final Observer<? super T> mObserver;    boolean mActive;    int mLastVersion = START_VERSION;    ObserverWrapper(Observer<? super T> observer) {        mObserver = observer;    }    abstract boolean shouldBeActive();    boolean isAttachedTo(LifecycleOwner owner) {        return false;    }    void detachObserver() {    }    void activeStateChanged(boolean newActive) {        if (newActive == mActive) {            return;        }        // immediately set active state, so we'd never dispatch anything to inactive        // owner        mActive = newActive;        changeActiveCounter(mActive ? 1 : -1);        if (mActive) {            dispatchingValue(this);        }    }}
+private abstract class ObserverWrapper {
+    final Observer<? super T> mObserver;
+    boolean mActive;
+    int mLastVersion = START_VERSION;
+
+    ObserverWrapper(Observer<? super T> observer) {
+        mObserver = observer;
+    }
+
+    abstract boolean shouldBeActive();
+
+    boolean isAttachedTo(LifecycleOwner owner) {
+        return false;
+    }
+
+    void detachObserver() {
+    }
+
+    void activeStateChanged(boolean newActive) {
+        if (newActive == mActive) {
+            return;
+        }
+        // immediately set active state, so we'd never dispatch anything to inactive
+        // owner
+        mActive = newActive;
+        changeActiveCounter(mActive ? 1 : -1);
+        if (mActive) {
+            dispatchingValue(this);
+        }
+    }
+}
 ```
 
 ## LifecycleBoundObserver
@@ -247,7 +277,46 @@ private abstract class ObserverWrapper {    final Observer<? super T> mObserver;
 옵저버와 함께 전달된 `LifecycleOwner`의 라이프사이클을 관찰하며, 상태가 `DESTROYED`로 전환되면 옵저버를 제거한다. 그 외의 이벤트에 대해서는 활성 상태인지 체크한 값으로 `activeStateChanged` 메소드를 호출한다.
 
 ```java
-class LifecycleBoundObserver extends ObserverWrapper implements LifecycleEventObserver {    @NonNull    final LifecycleOwner mOwner;    LifecycleBoundObserver(@NonNull LifecycleOwner owner, Observer<? super T> observer) {        super(observer);        mOwner = owner;    }    @Override    boolean shouldBeActive() {        return mOwner.getLifecycle().getCurrentState().isAtLeast(STARTED);    }    @Override    public void onStateChanged(@NonNull LifecycleOwner source,            @NonNull Lifecycle.Event event) {        Lifecycle.State currentState = mOwner.getLifecycle().getCurrentState();        if (currentState == DESTROYED) {            removeObserver(mObserver);            return;        }        Lifecycle.State prevState = null;        while (prevState != currentState) {            prevState = currentState;            activeStateChanged(shouldBeActive());            currentState = mOwner.getLifecycle().getCurrentState();        }    }    @Override    boolean isAttachedTo(LifecycleOwner owner) {        return mOwner == owner;    }    @Override    void detachObserver() {        mOwner.getLifecycle().removeObserver(this);    }}
+class LifecycleBoundObserver extends ObserverWrapper implements LifecycleEventObserver {
+    @NonNull
+    final LifecycleOwner mOwner;
+
+    LifecycleBoundObserver(@NonNull LifecycleOwner owner, Observer<? super T> observer) {
+        super(observer);
+        mOwner = owner;
+    }
+
+    @Override
+    boolean shouldBeActive() {
+        return mOwner.getLifecycle().getCurrentState().isAtLeast(STARTED);
+    }
+
+    @Override
+    public void onStateChanged(@NonNull LifecycleOwner source,
+            @NonNull Lifecycle.Event event) {
+        Lifecycle.State currentState = mOwner.getLifecycle().getCurrentState();
+        if (currentState == DESTROYED) {
+            removeObserver(mObserver);
+            return;
+        }
+        Lifecycle.State prevState = null;
+        while (prevState != currentState) {
+            prevState = currentState;
+            activeStateChanged(shouldBeActive());
+            currentState = mOwner.getLifecycle().getCurrentState();
+        }
+    }
+
+    @Override
+    boolean isAttachedTo(LifecycleOwner owner) {
+        return mOwner == owner;
+    }
+
+    @Override
+    void detachObserver() {
+        mOwner.getLifecycle().removeObserver(this);
+    }
+}
 ```
 
 ## LiveData의 동작 과정
@@ -261,7 +330,34 @@ class LifecycleBoundObserver extends ObserverWrapper implements LifecycleEventOb
 `LiveData`에서 데이터의 변경은 `setValue` 메소드를 통해 요청된다.
 
 ```java
-public abstract class LiveData<T> {    ...    static final int START_VERSION = -1;    private volatile Object mData;    private int mVersion;    public LiveData(T value) {        mData = value;        mVersion = START_VERSION + 1;    }    public LiveData() {        mData = NOT_SET;        mVersion = START_VERSION;    }    @MainThread    protected void setValue(T value) {        assertMainThread("setValue");        mVersion++;        mData = value;        dispatchingValue(null);    }}
+public abstract class LiveData<T> {
+
+    ...
+
+    static final int START_VERSION = -1;
+
+    private volatile Object mData;
+
+    private int mVersion;
+
+    public LiveData(T value) {
+        mData = value;
+        mVersion = START_VERSION + 1;
+    }
+
+    public LiveData() {
+        mData = NOT_SET;
+        mVersion = START_VERSION;
+    }
+
+    @MainThread
+    protected void setValue(T value) {
+        assertMainThread("setValue");
+        mVersion++;
+        mData = value;
+        dispatchingValue(null);
+    }
+}
 ```
 
 `LiveData`는 자체적으로 `mVersion`이라는 `int` 타입 필드를 관리한다. `mVersion`은 `LiveData` 인스턴스가 생성될 때 -1로 초기화되며, 이후 LiveD`a`ta의 데이터가 변경될 때 마다 1씩 증가한다.
@@ -271,7 +367,21 @@ public abstract class LiveData<T> {    ...    static final int START_VERSION = -
 `LiveData`의 옵저버 또한 `mLastVersion`이라는 필드를 가지고 있으며, `LiveData`는 옵저버에게 값을 전달하기 전에 옵저버의 `mLastVersion`과 자신의 `mVersion`을 비교하여 `mVersion`이 더 큰 경우에만 옵저버에게 변경된 값을 전달한다.
 
 ```java
-public abstract class LiveData<T> {    ...    private void considerNotify(ObserverWrapper observer) {        // 먼저 옵저버가 active 상태인지 확인        ...        if (observer.mLastVersion >= mVersion) {            return;        }        observer.mLastVersion = mVersion;        observer.mObserver.onChanged((T) mData);    }}
+public abstract class LiveData<T> {
+
+    ...
+
+    private void considerNotify(ObserverWrapper observer) {
+        // 먼저 옵저버가 active 상태인지 확인
+        ...
+
+        if (observer.mLastVersion >= mVersion) {
+            return;
+        }
+        observer.mLastVersion = mVersion;
+        observer.mObserver.onChanged((T) mData);
+    }
+}
 ```
 
 이로 인해 옵저버가 활성, 비활성 상태를 반복하더라도 데이터의 변경이 없었다면 비활성 상태에서 활성 상태로 전환된 최초 1회만 데이터의 변경을 전달받을 수 있고, 이후의 전환에선 불필요한 전달을 방지할 수 있다.
@@ -281,7 +391,34 @@ public abstract class LiveData<T> {    ...    private void considerNotify(Observ
 `LiveData`에 대한 옵저버를 등록하는 과정은 `LifecycleOwner`와 옵저버를 `observe` 메소드에 전달하는 과정으로 요청된다.
 
 ```java
-public abstract class LiveData<T> {    ...    private SafeIterableMap<Observer<? super T>, ObserverWrapper> mObservers =            new SafeIterableMap<>();    private volatile Object mData;    @MainThread    public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {        assertMainThread("observe");        if (owner.getLifecycle().getCurrentState() == DESTROYED) {            // ignore            return;        }        LifecycleBoundObserver wrapper = new LifecycleBoundObserver(owner, observer);        ObserverWrapper existing = mObservers.putIfAbsent(observer, wrapper);        if (existing != null && !existing.isAttachedTo(owner)) {            throw new IllegalArgumentException("Cannot add the same observer"                    + " with different lifecycles");        }        if (existing != null) {            return;        }        owner.getLifecycle().addObserver(wrapper);    }}
+public abstract class LiveData<T> {
+
+    ...
+
+    private SafeIterableMap<Observer<? super T>, ObserverWrapper> mObservers =
+            new SafeIterableMap<>();
+
+    private volatile Object mData;
+
+    @MainThread
+    public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
+        assertMainThread("observe");
+        if (owner.getLifecycle().getCurrentState() == DESTROYED) {
+            // ignore
+            return;
+        }
+        LifecycleBoundObserver wrapper = new LifecycleBoundObserver(owner, observer);
+        ObserverWrapper existing = mObservers.putIfAbsent(observer, wrapper);
+        if (existing != null && !existing.isAttachedTo(owner)) {
+            throw new IllegalArgumentException("Cannot add the same observer"
+                    + " with different lifecycles");
+        }
+        if (existing != null) {
+            return;
+        }
+        owner.getLifecycle().addObserver(wrapper);
+    }
+}
 ```
 
 `observe` 메소드가 호출되면 메소드에 전달된 파라미터를 사용하여 `LifecycleBoundObserver` 인스턴스를 생성한다. 이후 옵저버에 대한 validation을 수행하여 동일한 옵저버가 이미 등록되지 않은 경우에만 자체적으로 관리하는 옵저버 `Map`에 엔트리를 추가한다. 
@@ -300,7 +437,39 @@ public abstract class LiveData<T> {    ...    private SafeIterableMap<Observer<?
 두 경우 모두 변경을 전달하기 위한 진입점으로 `dispatchingValue` 메소드를 호출한다.
 
 ```java
-public abstract class LiveData<T> {    private SafeIterableMap<Observer<? super T>, ObserverWrapper> mObservers =            new SafeIterableMap<>();    private boolean mDispatchingValue;    @SuppressWarnings("FieldCanBeLocal")    private boolean mDispatchInvalidated;    @SuppressWarnings("WeakerAccess") /* synthetic access */    void dispatchingValue(@Nullable ObserverWrapper initiator) {        if (mDispatchingValue) {            mDispatchInvalidated = true;            return;        }        mDispatchingValue = true;        do {            mDispatchInvalidated = false;            if (initiator != null) {                considerNotify(initiator);                initiator = null;            } else {                for (Iterator<Map.Entry<Observer<? super T>, ObserverWrapper>> iterator =                        mObservers.iteratorWithAdditions(); iterator.hasNext(); ) {                    considerNotify(iterator.next().getValue());                    if (mDispatchInvalidated) {                        break;                    }                }            }        } while (mDispatchInvalidated);        mDispatchingValue = false;    }}
+public abstract class LiveData<T> {
+    private SafeIterableMap<Observer<? super T>, ObserverWrapper> mObservers =
+            new SafeIterableMap<>();
+
+    private boolean mDispatchingValue;
+    @SuppressWarnings("FieldCanBeLocal")
+    private boolean mDispatchInvalidated;
+
+    @SuppressWarnings("WeakerAccess") /* synthetic access */
+    void dispatchingValue(@Nullable ObserverWrapper initiator) {
+        if (mDispatchingValue) {
+            mDispatchInvalidated = true;
+            return;
+        }
+        mDispatchingValue = true;
+        do {
+            mDispatchInvalidated = false;
+            if (initiator != null) {
+                considerNotify(initiator);
+                initiator = null;
+            } else {
+                for (Iterator<Map.Entry<Observer<? super T>, ObserverWrapper>> iterator =
+                        mObservers.iteratorWithAdditions(); iterator.hasNext(); ) {
+                    considerNotify(iterator.next().getValue());
+                    if (mDispatchInvalidated) {
+                        break;
+                    }
+                }
+            }
+        } while (mDispatchInvalidated);
+        mDispatchingValue = false;
+    }
+}
 ```
 
 메소드 내에서는 `mDispatchingValue`와 `mDispatchInvalidated` 필드를 사용하여 변경 전파 도중 다른 트리거가 발생했을 때 빠르게 변경을 전파한다.
@@ -316,7 +485,21 @@ public abstract class LiveData<T> {    private SafeIterableMap<Observer<? super 
 변경을 전파하기 위해 호출되는 `considerNotify` 메소드에서는 옵저버와 `Lifecycle`의 상태 및 `version`을 비교한 후 옵저버의 `onChanged` 콜백을 호출한다.
 
 ```java
-private void considerNotify(ObserverWrapper observer) {    if (!observer.mActive) {        return;    }       if (!observer.shouldBeActive()) {        observer.activeStateChanged(false);        return;    }    if (observer.mLastVersion >= mVersion) {        return;    }    observer.mLastVersion = mVersion;    observer.mObserver.onChanged((T) mData);}
+private void considerNotify(ObserverWrapper observer) {
+    if (!observer.mActive) {
+        return;
+    }
+   
+    if (!observer.shouldBeActive()) {
+        observer.activeStateChanged(false);
+        return;
+    }
+    if (observer.mLastVersion >= mVersion) {
+        return;
+    }
+    observer.mLastVersion = mVersion;
+    observer.mObserver.onChanged((T) mData);
+}
 ```
 
 # ViewModel
@@ -330,7 +513,12 @@ private void considerNotify(ObserverWrapper observer) {    if (!observer.mActive
 뷰모델은 다음과 같이 생성하여 사용할 수 있다.
 
 ```kotlin
-class MainActivity : AppCompatActivity() {    override fun onCreate(savedInstanceState: Bundle?) {        ...        val model: MyViewModel = ViewModelProvider(this).get(MyViewModel::class.java)    }}
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+        val model: MyViewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+    }
+}
 ```
 
 이렇게 생성된 뷰모델 인스턴스는 연결된 액티비티가 백버튼 등으로 완전히 제거될 때 까지 보존된다.
@@ -352,7 +540,23 @@ class MainActivity : AppCompatActivity() {    override fun onCreate(savedInstanc
   생성된 뷰모델 인스턴스는 `ViewModelStore`에 의해 저장되고, 이후 다시 뷰모델을 요청하면 `ViewModelStore`에 저장된 뷰모델 인스턴스가 반환되어 동일한 뷰모델 인스턴스를 얻을 수 있다.
 
 ```java
-private final Factory mFactory;private final ViewModelStore mViewModelStore;public ViewModelProvider(@NonNull ViewModelStoreOwner owner) {    this(owner.getViewModelStore(), owner instanceof HasDefaultViewModelProviderFactory            ? ((HasDefaultViewModelProviderFactory) owner).getDefaultViewModelProviderFactory()            : NewInstanceFactory.getInstance());}public ViewModelProvider(@NonNull ViewModelStoreOwner owner, @NonNull Factory factory) {    this(owner.getViewModelStore(), factory);}public ViewModelProvider(@NonNull ViewModelStore store, @NonNull Factory factory) {    mFactory = factory;    mViewModelStore = store;}
+private final Factory mFactory;
+private final ViewModelStore mViewModelStore;
+
+public ViewModelProvider(@NonNull ViewModelStoreOwner owner) {
+    this(owner.getViewModelStore(), owner instanceof HasDefaultViewModelProviderFactory
+            ? ((HasDefaultViewModelProviderFactory) owner).getDefaultViewModelProviderFactory()
+            : NewInstanceFactory.getInstance());
+}
+
+public ViewModelProvider(@NonNull ViewModelStoreOwner owner, @NonNull Factory factory) {
+    this(owner.getViewModelStore(), factory);
+}
+
+public ViewModelProvider(@NonNull ViewModelStore store, @NonNull Factory factory) {
+    mFactory = factory;
+    mViewModelStore = store;
+}
 ```
 
 `mViewModelStore`는 `ViewModelProvider`의 생성자 파라미터로 받는 `ViewModelStoreOwner`로부터 얻는다. `Factory` 또한 생성자로부터 전달받을 수 있지만 그렇지 않다면 owner로부터 얻거나 새로운 팩토리 인스턴스를 생성한다.
@@ -372,7 +576,35 @@ private final Factory mFactory;private final ViewModelStore mViewModelStore;publ
 이를 위해 사용되는것이 `ViewModelStore` 이다.
 
 ```java
-public class ViewModelStore {    private final HashMap<String, ViewModel> mMap = new HashMap<>();    final void put(String key, ViewModel viewModel) {        ViewModel oldViewModel = mMap.put(key, viewModel);        if (oldViewModel != null) {            oldViewModel.onCleared();        }    }    final ViewModel get(String key) {        return mMap.get(key);    }    Set<String> keys() {        return new HashSet<>(mMap.keySet());    }    /**     *  Clears internal storage and notifies ViewModels that they are no longer used.     */    public final void clear() {        for (ViewModel vm : mMap.values()) {            vm.clear();        }        mMap.clear();    }}
+public class ViewModelStore {
+
+    private final HashMap<String, ViewModel> mMap = new HashMap<>();
+
+    final void put(String key, ViewModel viewModel) {
+        ViewModel oldViewModel = mMap.put(key, viewModel);
+        if (oldViewModel != null) {
+            oldViewModel.onCleared();
+        }
+    }
+
+    final ViewModel get(String key) {
+        return mMap.get(key);
+    }
+
+    Set<String> keys() {
+        return new HashSet<>(mMap.keySet());
+    }
+
+    /**
+     *  Clears internal storage and notifies ViewModels that they are no longer used.
+     */
+    public final void clear() {
+        for (ViewModel vm : mMap.values()) {
+            vm.clear();
+        }
+        mMap.clear();
+    }
+}
 ```
 
 `ViewModelStore`는 내부적으로 뷰모델을 `Map`으로 저장한다. `ViewModelStore`에 의해 저장되는 뷰모델 인스턴스는 `ViewModelStore`를 가지고 있는 액티비티가 완전히 종료될 때 clear가 호출되며 메모리에서 제거된다.
@@ -386,7 +618,31 @@ public class ViewModelStore {    private final HashMap<String, ViewModel> mMap =
 `ComponentActivity`에서 `ViewModelStore`를 얻는 코드를 보면 다음과 같다.
 
 ```java
-@NonNull@Overridepublic ViewModelStore getViewModelStore() {    if (getApplication() == null) {        throw new IllegalStateException("Your activity is not yet attached to the "                + "Application instance. You can't request ViewModel before onCreate call.");    }    ensureViewModelStore();    return mViewModelStore;}@SuppressWarnings("WeakerAccess") /* synthetic access */void ensureViewModelStore() {    if (mViewModelStore == null) {        NonConfigurationInstances nc =                (NonConfigurationInstances) getLastNonConfigurationInstance();        if (nc != null) {            // Restore the ViewModelStore from NonConfigurationInstances            mViewModelStore = nc.viewModelStore;        }        if (mViewModelStore == null) {            mViewModelStore = new ViewModelStore();        }    }}
+@NonNull
+@Override
+public ViewModelStore getViewModelStore() {
+    if (getApplication() == null) {
+        throw new IllegalStateException("Your activity is not yet attached to the "
+                + "Application instance. You can't request ViewModel before onCreate call.");
+    }
+    ensureViewModelStore();
+    return mViewModelStore;
+}
+
+@SuppressWarnings("WeakerAccess") /* synthetic access */
+void ensureViewModelStore() {
+    if (mViewModelStore == null) {
+        NonConfigurationInstances nc =
+                (NonConfigurationInstances) getLastNonConfigurationInstance();
+        if (nc != null) {
+            // Restore the ViewModelStore from NonConfigurationInstances
+            mViewModelStore = nc.viewModelStore;
+        }
+        if (mViewModelStore == null) {
+            mViewModelStore = new ViewModelStore();
+        }
+    }
+}
 ```
 
 `ComponentActivity`는 자신의 `ViewModelStore`를 `mViewModelStore`라는 필드에 저장하고, 이 필드는 `getViewModelStore` 메소드에서 호출하는 `ensureViewModelStore` 메소드 내에서 초기화된다는 것을 알 수 있다.
@@ -402,7 +658,24 @@ public class ViewModelStore {    private final HashMap<String, ViewModel> mMap =
 `ViewModelStore`의 `clear`를 호출하는 곳을 확인해보면 `ComponentActivity`의 생성자에서 `ViewModelStore`의 `clear`를 호출하는 `LifecycleEventObserver`를 등록하고 있는 것을 볼 수 있다.
 
 ```java
-public ComponentActivity() {    ...    getLifecycle().addObserver(new LifecycleEventObserver() {        @Override        public void onStateChanged(@NonNull LifecycleOwner source,                @NonNull Lifecycle.Event event) {            if (event == Lifecycle.Event.ON_DESTROY) {                // Clear out the available context                mContextAwareHelper.clearAvailableContext();                // And clear the ViewModelStore                if (!isChangingConfigurations()) {                    getViewModelStore().clear();                }            }        }    });    ...}
+public ComponentActivity() {
+    ...
+    getLifecycle().addObserver(new LifecycleEventObserver() {
+        @Override
+        public void onStateChanged(@NonNull LifecycleOwner source,
+                @NonNull Lifecycle.Event event) {
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                // Clear out the available context
+                mContextAwareHelper.clearAvailableContext();
+                // And clear the ViewModelStore
+                if (!isChangingConfigurations()) {
+                    getViewModelStore().clear();
+                }
+            }
+        }
+    });
+    ...
+}
 ```
 
 옵저버에서는 액티비티의 라이프사이클 이벤트를 관찰하며 `ON_DESTROY` 이벤트에 대해 장치에서 구성 변경이 발생하지 않은 경우에만 `ViewModelStore`를 초기화해주는 작업을 수행하고 있다!
