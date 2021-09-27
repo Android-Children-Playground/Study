@@ -31,3 +31,12 @@ ACP는 안드로이드와 관련된 각종 기술들의 학습 및 기술이 나
 #### week2. Fragment [#8](https://github.com/Android-Children-Playground/Study/issues/3)
 
 발표자 :[@PsPLoG](https://github.com/Android-Children-Playground/Study/blob/main/week2_fragment/K003/README.md), [@dongkey1198](https://github.com/Android-Children-Playground/Study/blob/main/week2_fragment/K002/README.md)
+
+#### week3. Bundle, Serializable [#13](https://github.com/Android-Children-Playground/Study/issues/13)
+
+발표자 :[@simeunseok](https://github.com/Android-Children-Playground/Study/blob/main/week3_bundle_serialization/K033/Week3.md), [@Jeong-heon2](https://github.com/Android-Children-Playground/Study/blob/main/week3_bundle_serialization/K059/%EC%A7%81%EB%A0%AC%ED%99%94.md) 
+
+#### week4. Lifecycle [#39](https://github.com/Android-Children-Playground/Study/issues/39)
+
+발표자 :[@sejins](https://github.com/Android-Children-Playground/Study/blob/main/week4_lifecycle/K006/README.md), [@dongkey1198](https://github.com/Android-Children-Playground/Study/blob/main/week4_lifecycle/K002/README.md)
+
