@@ -10,6 +10,10 @@ Android는 애플리케이션이 시작될 때 그리고 애플리케이션에�
 
 Process 간의 통신은 IPC(internal process communication)를 통해서 진행된다. IPC 기술의 베이스로 내부 통신과 보안을 위해 객체를 직렬화하는 기술이 RPC이고 안드로이드에서 사용하는 RPC가 AIDL이다.
 
+AIDL은 Corba IDL를 기반으로 하는 IDL이다. 
+
+IDL은 서비스, 클라이언트간의 규약이다 통신을 위한 자료형, 함수등을 지정해놓고 서로 지정한 방식으로만 통신을 하겠다는 약속이다. 
+
 ### 직렬화 Serialization
 
 Process 간 통신은 IPC를 통해서 일어난다 했다 그런데 여기에 직렬화는 왜 필요한 것일까? 메모리에 데이터는 두 가지 방식으로 존재한다.
