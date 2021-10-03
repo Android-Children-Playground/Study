@@ -27,7 +27,7 @@ WindowManager는 각각의 Window 표면에 Componenet를 그리기 위해 Surfa
 
 ## 2. Surface
 
-![Untitled](https://user-images.githubusercontent.com/50517813/135759760-fdd44867-8a59-460e-b669-9108769ad75e.png)
+<img src="https://user-images.githubusercontent.com/50517813/135759760-fdd44867-8a59-460e-b669-9108769ad75e.png" width="50%" height="50%"/>
 
 Window는 자신만의 Suface를 가지는데, Surface는 화면에 합성되는 픽셀을 고정하는 객체입니다.
 
