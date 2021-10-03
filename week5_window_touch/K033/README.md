@@ -17,7 +17,7 @@ Window > Surface > Canvas > View
 
 다음 사진에서 사각형으로 나뉘어진 부분이 안드로이드 화면에서 나뉜 Window이다.
 
-![Untitled](https://user-images.githubusercontent.com/50517813/135759740-5562661c-5505-4cfc-a9ed-e716b4d83d6d.png)
+<img src="https://user-images.githubusercontent.com/50517813/135759740-5562661c-5505-4cfc-a9ed-e716b4d83d6d.png" width="50%" height="50%"/>
 
 하나의 화면 안에서는 여러개의 Window를 가질 수 있고 이러한 Window들은 WindowManager가 관리한다.
 
