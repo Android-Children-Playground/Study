@@ -17,7 +17,7 @@ Window > Surface > Canvas > View
 
 다음 사진에서 사각형으로 나뉘어진 부분이 안드로이드 화면에서 나뉜 Window이다.
 
-
+![Untitled](https://user-images.githubusercontent.com/50517813/135759740-5562661c-5505-4cfc-a9ed-e716b4d83d6d.png)
 
 하나의 화면 안에서는 여러개의 Window를 가질 수 있고 이러한 Window들은 WindowManager가 관리한다.
 
@@ -27,7 +27,7 @@ WindowManager는 각각의 Window 표면에 Componenet를 그리기 위해 Surfa
 
 ## 2. Surface
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0712b5a1-412c-4346-b0e9-6102d83fe10f/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/135759760-fdd44867-8a59-460e-b669-9108769ad75e.png)
 
 Window는 자신만의 Suface를 가지는데, Surface는 화면에 합성되는 픽셀을 고정하는 객체입니다.
 
@@ -39,7 +39,7 @@ Canvas는 모든 Draw 방법을 포함하는 클래스이다.
 
 원이나 사각형 등을 그리는 방법에 대한 모든 로직이 Canvas에 포함되어있다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0279f7c8-86d3-41ef-ae38-a7fec8dbc879/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/135759769-a4248780-7e7b-41da-bd6a-8a3e8ef3ad66.png)
 
 ## 4. View
 
@@ -67,13 +67,13 @@ view들은 각자 순서에 각자 필요한 부분을 canvas에 그리게 된�
 
 사용자에게 결정을 내리거나 추가 정보를 입력하라는 메시지를 표시하는 작은 창
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5b8f845f-1355-4ce1-8ca8-86ed0be7893b/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/135759780-ac02e7cd-a143-4af1-8698-fc22d9ce4a85.png)
 
 ## 2. Bubble
 
 도움말 풍선은 알림 시스템에 내장되어 있으며, 버블을 펼쳐 앱 기능과 정보를 살펴볼 수 있고 사용하지 않을 때는 접을 수 있다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6c1c3add-23ba-4b62-b78d-8d4b1951b0ae/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/135759784-e03d9552-ed39-4daf-b3f4-636c79ea9a71.png)
 
 # window에서 view까지 터치 과정
 
@@ -93,7 +93,7 @@ Button 처럼 터치와 클릭 이벤트가 공존하는 경우, 우선적으로
 
 반대로 이벤트 처리는 View > ViewGroup > Activity 순으로 처리된다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cf012f89-fa71-4e72-b838-a9ef04276f4c/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/135759792-7cb09f87-e67c-4583-80b5-f565d4512880.png)
 
 Activity에서 터치 신호를 받게되면 바로 `onTouchEvent` 하지 않고 ViewGroup으로 `dispatch`한다.
 
@@ -105,7 +105,7 @@ View가 `onTouchEvent()` 의 반환으로 `true` 를 리턴하면 상위 ViewGro
 
 터치가 발생했을 때, 하위 대상에 알리지 않고 자기선에서 처리하고 싶을 때 사용하는 메소드이다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bb6f9f0b-bad7-42dc-9e4e-7ba82b0ab7b8/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/135759830-001466b6-3c8d-4e36-b730-7cdfece3c242.png)
 
 예를 들어, ViewGroup이 하위 View에게 전달되어야할 터치 신호를 보내지않고 Intercept 할 경우, View는 터치이벤트를 실행하지 않을 것이다. 그리고 ViewGroup의 `onTouchEvent()` 가 실행될 것이다.
 
@@ -123,4 +123,5 @@ View가 `onTouchEvent()` 의 반환으로 `true` 를 리턴하면 상위 ViewGro
 
 ## 이미지로 보는 터치 이벤트 처리 과정
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fb78ed00-16c6-46f2-94a3-d27ce2292109/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/50517813/135759850-249dc283-1a22-4918-b83f-4a3180f5a62a.png)
+
