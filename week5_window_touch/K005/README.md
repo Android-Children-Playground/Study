@@ -215,11 +215,11 @@ class CustomView(
 </com.acp.week5.Layer1>
 ```
 
-![Untitled](./res/picture (1).png)
+<img src="./res/picture (1).png" />
 
 가장 녹색 영역이 짙은 Layer3을 터치했을 때의 로그는 다음과 같이 출력된다.
 
-![Untitled](./res/picture (2).png)
+<img src="./res/picture (2).png" />
 
 로그를 확인하면 터치 이벤트가 발생했을 때 먼저 `Activity`에서 `dispatchTouchEvent`가 호출되고, `onInterceptTouchEvent`에서 터치 이벤트 인터셉트 여부를 확인하고, 레이아웃 계층을 따라 터치 이벤트가 전파되는 것을 볼 수 있다.
 
@@ -227,13 +227,13 @@ class CustomView(
 
 그렇다면 이번엔 Layer3의 `onTouchEvent`에서 `true`를 반환했을 때의 로그를 확인해보자.
 
-![Untitled](./res/picture (3).png)
+<img src="./res/picture (3).png" />
 
 터치 이벤트가 전달 되는 과정은 동일하지만 Layer3의 `onTouchEvent`에서 `true`를 반환했기 때문에 후속 이벤트가 Layer3에 전달되는 것을 볼 수 있다.
 
 만약 여기서 Layer1이 터치 이벤트를 인터셉트 한다면 어떻게 될까?
 
-![Untitled](./res/picture (4).png)
+<img src="./res/picture (4).png" />
 
 터치 이벤트가 전달되는 과정에서 Layer1에 의해 인터셉트 되었기 때문에 자식 뷰로 전달되지 않고 Layer1의 `onTouchEvent`가 즉시 호출된다. 하지만 Layer1의 `onTouchEvent`에서 이벤트 소모에 대한 처리를 하지 않아서 후속 이벤트는 액티비티에 전달되었다.
 
@@ -258,7 +258,7 @@ class CustomView(
 
 이전의 작업들을 지우고 Layer1에서 `disaptchTouchEvent`가 true를 반환하는 작업만 추가하여 로그를 확인해보자.
 
-![Untitled](./res/picture (5).png)
+<img src="./res/picture (5).png" />
 
 로그에서 볼 수 있듯 처음의 터치 이벤트가 자식 뷰들에게 전파된 후 후속 이벤트에 대해서만 Layer1이 처리하고 있다. 따라서 부모 뷰에서 자식 뷰의 터치 이벤트를 가로챈 후 후속 이벤트에 대해서도 부모 뷰가 처리할 수 있도록 구현하려면 부모 뷰에서 `onInterceptTouchEvent`가 true를 반환하도록 수정할 뿐만 아니라, `onTouchEvent` 또는 `dispatchTouchEvent`에서 `true`를 반환하여 후속 이벤트를 받는 대상이 자신이라는 것을 알려야 한다.
 
@@ -266,11 +266,11 @@ class CustomView(
 
 여기 까지 터치 이벤트가 전달되는 과정을 이해했으면 아래 그림이 어떤 의미를 가지는지 알 수 있다.
 
-![Untitled](./res/picture (6).png)
+<img src="./res/picture (6).png" />
 
 출처: [https://stackoverflow.com/questions/7449799/how-are-android-touch-events-delivered/46862320#46862320](https://stackoverflow.com/questions/7449799/how-are-android-touch-events-delivered/46862320#46862320)
 
-![Untitled](./res/picture (7).png)
+<img src="./res/picture (7).png" />
 
 출처: [https://stackoverflow.com/questions/7449799/how-are-android-touch-events-delivered/46862320#46862320](https://stackoverflow.com/questions/7449799/how-are-android-touch-events-delivered/46862320#46862320)
 
@@ -280,7 +280,7 @@ class CustomView(
 
 여기에 따르면 다음과 같이 그림을 수정할 수 있다.
 
-![Untitled](./res/picture (8).png)
+<img src="./res/picture (8).png" />
 
 # 터치 이벤트의 응용
 
