@@ -1,5 +1,4 @@
-Android Thread
+Annotation
 
-- MainThread(UiThread)
-- Looper, Message Queue
-- Handler, viewPost, runOnUiThread
+- annotation은 무엇인가, custom annotation 만들기
+- annotation process 맛보기
