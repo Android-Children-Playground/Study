@@ -144,3 +144,114 @@ class Test {
 - setparam - 프로퍼티의 setter 함수 매개변수에 어노테이션이 추가됨.
 
 추가로 여러 annotation을 줄 때 @get:[TestAnnotation TestAnnotation2]을 하면 된다.
+
+참고 [https://colinch4.github.io/2020-11-29/어노테이션/](https://colinch4.github.io/2020-11-29/%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98/)
+
+# Custom Annotation 직접 만들기!
+
+위에서 공부한 Custom Annotation 방법으로 간단한 annotation을 만들어보자!
+
+## 목표
+
+서로 협업하는 과정에서 누가 어떤 코드를 작성했고 수정했는지 알고싶어진 나는 작성자를 알 수 있는 Annotation을 만드려고 한다!
+
+## 1. annotation 생성
+
+```kotlin
+import java.time.LocalDate
+import kotlin.reflect.KClass
+
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+annotation class Writer(val name: String, val date: String)
+```
+
+코드 작성자의 이름과 코드 작성 시각을 알기위해 annotation의 생성자에 name과 date를 준다.
+
+또한 작성한 코드는 클래스와 클래스 내 메소드만 확인하고 싶기에 Target은 Class와 Function만 추가해준다.
+
+### 2. 기능 추가
+
+```kotlin
+fun showWriterInfo(arg: Class<*>) {
+    if (arg.isAnnotationPresent(Writer::class.java)) {
+        val annotation = arg.getAnnotation(Writer::class.java)
+        val name = annotation.name
+        val date = annotation.date
+        val methods = arg.methods
+
+        Log.d("Writer", "작성된 클래스 ${arg.name.substringAfterLast(".")}, 작성자 : ${name}, 작성일 : $date")
+
+        for(method in methods) {
+            if (method.isAnnotationPresent(Writer::class.java)) {
+                val annotation = method.getAnnotation((Writer::class.java))
+                val name = annotation.name
+                val date = annotation.date
+                Log.d("Writer", "작성된 메소드 ${method.name}, 작성자 : ${name}, 작성일 : $date")
+            }
+        }
+
+    }
+}
+```
+
+클래스 또는 메소드에 Writer annotation이 있는지 확인하고, 있다면 클래스, 메소드 이름과, 작성자, 작성일을 출력한다.
+
+### 3. 테스트 코드
+
+```kotlin
+@Writer("은석", "2021-10-25")
+class A {
+    init {
+        showWriterInfo(this.javaClass)
+    }
+    @Writer("민석", "2021-10-25")
+    fun foo1() {}
+
+    @Writer("세진", "2021-10-25")
+    fun foo2() {}
+}
+
+class B {
+    init {
+        showWriterInfo(this.javaClass)
+    }
+
+    @Writer("성환", "20201-10-23")
+    fun foo1() {}
+
+    @Writer("정헌", "2021-10-24")
+    fun foo2() {}
+}
+
+@Writer("정헌", "2021-10-21")
+class C {
+    init {
+        showWriterInfo(this.javaClass)
+    }
+
+    fun foo1() {}
+
+    @Writer("성환", "20201-10-23")
+    fun foo2() {}
+
+    @Writer("민석", "2021-10-25")
+    fun foo3() {}
+}
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val a = A()
+        val b = B()
+        val c = C()
+    }
+}
+```
+
+### 4. 결과
+
+![Untitled (1)](https://user-images.githubusercontent.com/50517813/138603434-14c8ab3c-8df0-4c62-85ad-4c4b391218d3.png)
+
+Writer annotation을 달아준 클래스와 메소드의 정보만 출력되는 것을 확인할 수 있다!!
